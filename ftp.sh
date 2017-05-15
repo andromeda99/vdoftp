@@ -1,20 +1,25 @@
 #!/bin/bash
 ###   Connecting to remote server via LFTP protocol & downloading "VDOPIA_SDK" directory to the current working directory.
 ###   Please make sure to install lftp package before running this script.
-###   You can rename the TARGETFOLDER on line no. 9 if the target folder has changed. Similarly you can also change HOST,USER & PASSWORD
+###   You can rename the TARGETFOLDER on line no. 10 if the target folder has changed. Similarly you can also change HOST,USER & PASSWORD
 echo "Connecting to remote host 34.203.2.241 via LFTP..."
+sleep 2;
 HOST='34.203.2.241'
 USER='vdoftp'
 PASS='vdoftp$$12!'
 TARGETFOLDER='VDOPIA_SDK'
-DESTINATION='/ftp_task'
-
-lftp -f "
+LOCAL='/ftp_task'
+lftp -e "
 open $HOST 
 user $USER $PASS 
 mirror  $TARGETFOLDER
+bye
 "
-echo "$TARGETFOLDER copied to $DESTINATION successfully"
-cd $DESTINATION
-ls -l $DESTINATION
+x=`echo $?`
+if [ $x == 0 ]; then
+echo "$TARGETFOLDER copied to $LOCAL successfully"
+ls -l $LOCAL
 exit 0
+else
+echo "Please try again"
+fi

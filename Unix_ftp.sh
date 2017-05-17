@@ -8,19 +8,17 @@ connect_remote_FTP () {
         HOST='34.203.2.241'
         USER='vdoftp'
         PASS='vdoftp$$12!'
-	LOCAL='/users/$USER'
         TARGETFOLDER='VDOPIA_SDK'
         lftp -e "
         open $HOST
         user $USER $PASS
-        lcd $LOCAL
         mirror  $TARGETFOLDER
         bye
         "
         x=`echo $?`
         if [ $x == 0 ]; then
         echo "$TARGETFOLDER copied to $LOCAL successfully"
-        ls -l $LOCAL
+        ls -l
         exit 0
         else
         echo "Please try again"
@@ -29,8 +27,8 @@ connect_remote_FTP () {
 }
 
 if [ -f /usr/local/bin/lftp ]; then
-	echo "lftp is already installed"
 	cd /users/$USER
+	echo "lftp is already installed"
 	connect_remote_FTP
 	exit 0
 else
